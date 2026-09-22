@@ -1,0 +1,61 @@
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+const RiskAgent = require('./services/risk-agent');
+const SignalAgent = require('./services/signal-agent');
+const GmailService = require('./services/gmail.service');
+const StripeService = require('./services/stripe.service');
+const FirebaseService = require('./services/firebase.service');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
+
+const riskAgent = new RiskAgent();
+const signalAgent = new SignalAgent();
+const gmailService = new GmailService();
+const stripeService = new StripeService();
+const firebaseService = process.env.FIREBASE_PROJECT_ID ? new FirebaseService() : null;
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString(), port: PORT });
+});
+
+app.get('/api/observations', async (req, res) => {
+  try {
+    const gmail = await gmailService.getUnreadCount();
+    const stripe = await stripeService.getRecentCharges();
+    res.json({ gmail_unread: gmail, stripe_recent: stripe, timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/webhooks', (req, res) => {
+  res.json({ endpoints: ['POST /webhooks/bonusvarsel/announce', 'POST /webhooks/bonusvarsel/metrics', 'POST /webhooks/bonusvarsel/alert', 'POST /webhooks/bonusshop/transaction', 'POST /webhooks/bonusshop/affiliate', 'POST /webhooks/bonusshop/campaign'] });
+});
+
+const bonusvarselWebhook = require('./webhooks/bonusvarsel.webhook');
+const bonusshopWebhook = require('./webhooks/bonusshop.webhook');
+
+app.post('/webhooks/bonusvarsel/announce', bonusvarselWebhook.announce);
+app.post('/webhooks/bonusvarsel/metrics', bonusvarselWebhook.metrics);
+app.post('/webhooks/bonusvarsel/alert', bonusvarselWebhook.alert);
+app.post('/webhooks/bonusshop/transaction', bonusshopWebhook.transaction);
+app.post('/webhooks/bonusshop/affiliate', bonusshopWebhook.affiliate);
+app.post('/webhooks/bonusshop/campaign', bonusshopWebhook.campaign);
+
+
+// OAuth callback handler for Gmail integration
+app.get('/oauth/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) {
+    return res.status(400).json({ error: 'No authorization code provided' });
+  }
+  console.log('\n✓ AUTHORIZATION CODE:', code);
+  res.json({ code, message: 'Authorization code received. Paste into the terminal running get-gmail-token.js' });
+});
+
+
+app.listen(PORT, () => { console.log(`🌐 ATLAS API running on http://localhost:${PORT}`); });
