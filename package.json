@@ -17,7 +17,8 @@
     "googleapis": "^181.0.0",
     "node-fetch": "^2.7.0",
     "sqlite3": "^5.1.6",
-    "stripe": "^13.0.0"
+    "stripe": "^13.0.0",
+    "undici": "^8.11.0"
   },
   "engines": {
     "node": ">=16.0.0"
