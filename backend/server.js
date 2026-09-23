@@ -1,10 +1,3 @@
-// Polyfill fetch for Node 16+ compatibility using cross-fetch
-if (!globalThis.fetch) {
-  require('cross-fetch/polyfill');
-}
-
-
-
 const express = require('express');
 const cors = require('cors');
 const RiskAgent = require('./services/risk-agent');
@@ -81,7 +74,6 @@ app.post('/api/orchestrate/risk-analysis', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields: email, subject' });
     }
     
-    // Call RiskAgent to analyze the data
     const analysis = await riskAgent.analyzeRisk({
       email,
       subject,
@@ -95,27 +87,11 @@ app.post('/api/orchestrate/risk-analysis', async (req, res) => {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    res.status(500).json({ 
-      status: 'error',
-      message: error.message,
-      timestamp: new Date().toISOString()
-    });
+    console.error('Orchestration error:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Orchestration Status Endpoint
-app.get('/api/orchestrate/status', (req, res) => {
-  res.json({
-    status: 'orchestration_ready',
-    agents: {
-      risk: 'initialized',
-      signal: 'initialized',
-      gmail: 'initialized',
-      stripe: 'initialized'
-    },
-    timestamp: new Date().toISOString()
-  });
-});
 app.listen(PORT, () => {
-  console.log(`🌐 ATLAS API running on http://localhost:${PORT}`);
+  console.log(`🚀 ATLAS Orchestration API running on port ${PORT}`);
 });
