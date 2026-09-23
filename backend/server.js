@@ -7,7 +7,6 @@ if (!globalThis.fetch) {
   globalThis.Request = Request;
   globalThis.Response = Response;
 }
-}
 
 const express = require('express');
 const cors = require('cors');
