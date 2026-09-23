@@ -70,6 +70,51 @@ app.get('/oauth/callback', (req, res) => {
   res.json({ status: 'code_received', code: code.substring(0, 50) });
 });
 
+
+// Orchestration Test Endpoint
+app.post('/api/orchestrate/risk-analysis', async (req, res) => {
+  try {
+    const { email, subject, amount } = req.body;
+    
+    if (!email || !subject) {
+      return res.status(400).json({ error: 'Missing required fields: email, subject' });
+    }
+    
+    // Call RiskAgent to analyze the data
+    const analysis = await riskAgent.analyzeRisk({
+      email,
+      subject,
+      amount: amount || 0,
+      timestamp: new Date().toISOString()
+    });
+    
+    res.json({
+      status: 'success',
+      analysis,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Orchestration Status Endpoint
+app.get('/api/orchestrate/status', (req, res) => {
+  res.json({
+    status: 'orchestration_ready',
+    agents: {
+      risk: 'initialized',
+      signal: 'initialized',
+      gmail: 'initialized',
+      stripe: 'initialized'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
 app.listen(PORT, () => {
   console.log(`🌐 ATLAS API running on http://localhost:${PORT}`);
 });
