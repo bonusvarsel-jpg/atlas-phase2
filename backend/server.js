@@ -1,7 +1,12 @@
-// Polyfill fetch for Node 16 compatibility (Anthropic SDK requires globalThis.fetch)
+// Polyfill fetch for Node 16 compatibility (Anthropic SDK requires globalThis.fetch and Headers)
 if (!globalThis.fetch) {
   const fetch = require('node-fetch');
+  const { Headers, Request, Response } = require('node-fetch');
+  
   globalThis.fetch = fetch;
+  globalThis.Headers = Headers;
+  globalThis.Request = Request;
+  globalThis.Response = Response;
 }
 
 const express = require('express');
