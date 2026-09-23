@@ -1,3 +1,9 @@
+// Polyfill fetch for Node 16 compatibility (Anthropic SDK requires globalThis.fetch)
+if (!globalThis.fetch) {
+  const fetch = require('node-fetch');
+  globalThis.fetch = fetch;
+}
+
 const express = require('express');
 const cors = require('cors');
 const RiskAgent = require('./services/risk-agent');
