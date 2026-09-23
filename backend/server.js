@@ -1,19 +1,3 @@
-// Minimal polyfill - Anthropic SDK needs FormData globally
-if (typeof globalThis.FormData === 'undefined') {
-  try {
-    const FormDataClass = require('form-data');
-    globalThis.FormData = FormDataClass;
-  } catch (e) {
-    // Fallback: try undici
-    try {
-      const { FormData } = require('undici');
-      globalThis.FormData = FormData;
-    } catch (e2) {
-      console.warn('⚠️ FormData polyfill failed - SDK may not work properly');
-    }
-  }
-}
-
 const express = require('express');
 const cors = require('cors');
 const RiskAgent = require('./services/risk-agent');
