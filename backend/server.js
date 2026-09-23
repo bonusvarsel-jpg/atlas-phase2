@@ -1,11 +1,13 @@
 // Polyfill fetch for Node 16+ compatibility using undici (Anthropic SDK requirement)
 if (!globalThis.fetch) {
-  const { fetch, Headers, Request, Response } = require('undici');
+  const { fetch, Headers, Request, Response, FormData } = require('undici');
   
   globalThis.fetch = fetch;
   globalThis.Headers = Headers;
   globalThis.Request = Request;
   globalThis.Response = Response;
+  globalThis.FormData = FormData;
+}
 }
 
 const express = require('express');
