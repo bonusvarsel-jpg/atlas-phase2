@@ -14,7 +14,7 @@ Timestamp: ${timestamp}
 Provide JSON response: {classification: "safe"|"suspicious"|"high_risk", risk_score: 0.0-1.0, reasoning: "..."}`;
       
       const message = await this.client.messages.create({
-        model: 'claude-3-5-haiku-20241022',
+        model: 'claude-3-haiku-20240307',
         max_tokens: 500,
         messages: [{ role: 'user', content: prompt }]
       });
@@ -32,7 +32,7 @@ Provide JSON response: {classification: "safe"|"suspicious"|"high_risk", risk_sc
   async classifyEmailRisk(email) {
     try {
       const prompt = `Analyze this email for financial risk. Email: From: ${email.from_addr}, Subject: ${email.subject}, Body: ${email.body_snippet}. Respond with JSON: {classification: "safe"|"suspicious"|"high_risk", risk_score: 0.0-1.0, reasoning: "..."}`;
-      const message = await this.client.messages.create({ model: 'claude-3-5-haiku-20241022', max_tokens: 500, messages: [{ role: 'user', content: prompt }] });
+      const message = await this.client.messages.create({ model: 'claude-3-haiku-20240307', max_tokens: 500, messages: [{ role: 'user', content: prompt }] });
       const content = message.content[0].text;
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) { return JSON.parse(jsonMatch[0]); }
@@ -46,7 +46,7 @@ Provide JSON response: {classification: "safe"|"suspicious"|"high_risk", risk_sc
   async classifyChargeRisk(charge) {
     try {
       const prompt = `Analyze this charge for financial risk. Amount: $${charge.amount}, Merchant: ${charge.merchant}, Description: ${charge.description}. Respond with JSON: {classification: "safe"|"suspicious"|"high_risk", risk_score: 0.0-1.0, reasoning: "..."}`;
-      const message = await this.client.messages.create({ model: 'claude-3-5-haiku-20241022', max_tokens: 500, messages: [{ role: 'user', content: prompt }] });
+      const message = await this.client.messages.create({ model: 'claude-3-haiku-20240307', max_tokens: 500, messages: [{ role: 'user', content: prompt }] });
       const content = message.content[0].text;
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) { return JSON.parse(jsonMatch[0]); }
