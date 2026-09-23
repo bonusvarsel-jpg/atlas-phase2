@@ -58,3 +58,4 @@ Provide JSON response: {classification: "safe"|"suspicious"|"high_risk", risk_sc
   }
 }
 module.exports = RiskAgent;
+// Last rebuild: Wed Sep 23 17:40:37 UTC 2026
