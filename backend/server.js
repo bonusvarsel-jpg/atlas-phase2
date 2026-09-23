@@ -8,7 +8,7 @@ if (!globalThis.fetch) {
   globalThis.Response = Response;
   globalThis.FormData = FormData;
 }
-}
+
 
 const express = require('express');
 const cors = require('cors');
