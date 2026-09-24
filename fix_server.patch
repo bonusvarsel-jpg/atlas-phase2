@@ -1,6 +1,0 @@
-const SignalAgent = require('./services/signal-agent');
-EOF
-
-# Replace the problematic line in server.js
-sed -i.bak 's/const signalAgent = new SignalAgent();/let signalAgent; try { signalAgent = new SignalAgent(); } catch(e) { console.log("⚠️ SignalAgent init skipped"); signalAgent = null; }/g' backend/server.js
-echo "✅ Patched server.js"
