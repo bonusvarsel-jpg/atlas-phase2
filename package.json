@@ -1,28 +1,25 @@
 {
-  "name": "atlas-phase2",
-  "version": "2.0.0",
-  "description": "Real-time financial risk detection system",
-  "main": "backend/server.js",
+  "name": "atlas-backend",
+  "version": "1.0.0",
+  "description": "ATLAS Phase 4.3 - Agent Orchestration Backend",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "start": "node backend/server.js",
-    "test": "node scripts/test-signals.js",
-    "dev": "NODE_ENV=development node backend/server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.126.0",
-    "axios": "^1.4.0",
-    "cors": "^2.8.6",
-    "cross-fetch": "^4.1.0",
-    "dotenv": "^16.0.3",
-    "express": "^4.22.3",
-    "form-data": "^4.0.6",
-    "googleapis": "^181.0.0",
-    "node-fetch": "^2.7.0",
-    "sqlite3": "^5.1.6",
-    "stripe": "^13.0.0",
-    "undici": "^8.11.0"
+    "@anthropic-ai/sdk": "^0.26.1",
+    "express": "^4.18.2"
   },
-  "engines": {
-    "node": ">=16.0.0"
-  }
+  "devDependencies": {},
+  "keywords": [
+    "atlas",
+    "orchestration",
+    "risk-analysis"
+  ],
+  "author": "ATLAS Team",
+  "license": "MIT"
 }
